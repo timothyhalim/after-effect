@@ -1,4 +1,7 @@
 ﻿{
+	var aeVersion = app.version;
+	aeVersion = parseFloat(aeVersion.substring(0, aeVersion.indexOf("x")));
+	
     var defaultCompName = "";
     var defaultFrameRate = 25;
     var defaultWidth = 1920;
@@ -112,8 +115,12 @@
                 fps = parseFloat(myPanel.grp.panel.fpsGroup.fpsText.text)
                 s = parseFloat(myPanel.grp.panel.startGroup.startText.text)
                 
-                var newComp = app.project.items.addComp(n, w, h,1, d/fps, fps);
-                newComp.displayStartTime = (s+0.001)/fps
+                var newComp = app.project.items.addComp(n, w, h, 1, d/fps, fps);
+				if (aeVersion >= 17.1) {
+					newComp.displayStartFrame = s;
+				} else {
+					newComp.displayStartTime = s/fps + 0.00001;
+				}
                 var selections = app.project.selection
                 for (var i = 0; i < selections.length; i++) {
                     newComp.layers.add(selections[i]);
